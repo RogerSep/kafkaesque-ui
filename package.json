@@ -1,5 +1,5 @@
 {
-  "name": "kafkaesque",
+  "name": "kafkaesque-ui",
   "description": "A kafka inspired message system for event-driven front-end applications.",
   "version": "0.0.0-semantically-released",
   "main": "dist/index.js",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/RogerSep/kafkaesque.git"
+    "url": "https://github.com/RogerSep/kafkaesque-ui.git"
   },
   "keywords": [
     "message",
@@ -35,9 +35,9 @@
   "author": "Roger Sepúlveda",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/RogerSep/kafkaesque/issues"
+    "url": "https://github.com/RogerSep/kafkaesque-ui/issues"
   },
-  "homepage": "https://github.com/RogerSep/kafkaesque#readme",
+  "homepage": "https://github.com/RogerSep/kafkaesque-ui#readme",
   "dependencies": {
     "ramda": "0.22.1",
     "rx": "4.1.0"
