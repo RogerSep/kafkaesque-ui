@@ -7,7 +7,7 @@ export default {
   output: {
     path: join(__dirname, 'dist'),
     libraryTarget: 'umd',
-    library: 'kafkaesque'
+    library: 'kafkaesque-ui'
   },
   devtool: 'source-map',
   module: {
