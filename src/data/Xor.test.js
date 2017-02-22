@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import { Left, Right } from './Xor';
 
 describe("Xor", () => {
@@ -7,8 +6,8 @@ describe("Xor", () => {
       const xor = new Left("L");
 
       xor.fold(
-        l => expect(l).to.equal("L"),
-        r => expect(true).to.be.false
+        l => expect(l).toBe("L"),
+        r => expect(true).toBe(false)
       );
     });
 
@@ -16,8 +15,8 @@ describe("Xor", () => {
       const xor = new Right("R");
 
       xor.fold(
-        l => expect(true).to.be.false,
-        r => expect(r).to.equal("R")
+        l => expect(true).toBe(false),
+        r => expect(r).toBe("R")
       );
     });
   });
@@ -26,13 +25,13 @@ describe("Xor", () => {
     it("should transform the value when the Xor is left", () => {
       const xor = new Left("L");
 
-      expect(xor.map(x => x + x).value).to.equal("LL")
+      expect(xor.map(x => x + x).value).toBe("LL")
     });
 
     it("should not transform the value when the Xor is right", () => {
       const xor = new Right("R");
 
-      expect(xor.map(x => x + x).value).to.equal("R")
+      expect(xor.map(x => x + x).value).toBe("R")
     });
   });
 
@@ -41,16 +40,16 @@ describe("Xor", () => {
       const xor = new Left("L")
         .flatMap(x => new Right(`=> ${x}`));
 
-      expect(xor.value).to.equal("=> L");
-      expect(xor.isLeft).to.be.false;
+      expect(xor.value).toBe("=> L");
+      expect(xor.isLeft).toBe(false);
     });
 
     it("should yield the same reference when the Xor is right", () => {
       const xor = new Right("L")
         .flatMap(x => new Left(`=> ${x}`));
 
-      expect(xor.value).to.equal("L");
-      expect(xor.isLeft).to.be.false;
+      expect(xor.value).toBe("L");
+      expect(xor.isLeft).toBe(false);
     });
   });
 
@@ -58,13 +57,13 @@ describe("Xor", () => {
     it("should run the function when the Xor is left", () => {
       const xor = new Left("L");
 
-      xor.forEach(v => expect(v).to.equal("L"))
+      xor.forEach(v => expect(v).toBe("L"));
     });
 
     it("should not run the function when the Xor is right", () => {
       const xor = new Right("L");
 
-      xor.forEach(v => expect(true).to.be.false)
+      xor.forEach(v => expect(true).toBe(false));
     });
   });
 
@@ -73,8 +72,8 @@ describe("Xor", () => {
       const left = new Left("L")
       const right = new Right("R")
 
-      expect(left.toString()).to.equal(`Left(L)`)
-      expect(right.toString()).to.equal(`Right(R)`)
+      expect(left.toString()).toBe(`Left(L)`)
+      expect(right.toString()).toBe(`Right(R)`)
     });
   });
 });

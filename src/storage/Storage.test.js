@@ -1,6 +1,4 @@
-import { store, topicIndex, topicValues } from './Storage';
-
-describe('Storage', () => {
+describe('Store', () => {
   beforeEach(() => {
     var store = {};
 
@@ -9,7 +7,9 @@ describe('Storage', () => {
     });
     spyOn(localStorage, 'setItem').andCallFake((key, value) => {
       if (key === 'error') {
-        throw new Error('Mocked error when localStorage is full');
+        const err = Error('Mocked error when localStorage is full');
+        err.name = '';
+        throw err;
       }
 
       return store[key] = value + '';
@@ -18,17 +18,4 @@ describe('Storage', () => {
       store = {};
     });
   });
-
-  describe('TopicValues function', () => {
-    beforeEach(() => {
-      ['TopicA', 'TopicA', 'TopicA', 'TopicB'].forEach((t, i) => {
-        localStorage.setItem(`kfque.${i}.${t}.${Date.now()}`, `${i}`)
-      });
-    });
-
-    it('a', () => {
-
-    });
-  });
-
 });

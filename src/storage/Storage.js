@@ -15,11 +15,11 @@ const store = (name, value) => {
 };
 
 const topicIndex = topicName => {
-
+  return 1;
 };
 
 const topicValues = topicName => {
-  Rx.Observable.range(0, localStorage.length)
+  return Rx.Observable.range(0, localStorage.length)
     .flatMap(index => {
       const key = localStorage.key(index);
       if (
