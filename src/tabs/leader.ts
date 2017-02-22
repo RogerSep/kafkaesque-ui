@@ -9,12 +9,16 @@ const tabId: string = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
     return v.toString(16);
   });
 
+function setUpLeader() {
+  localStorage.setItem("kafkaesque-ui.leader", tabId);
+  l()
+}
+
 function runIfLeader() {
   const leader = localStorage.getItem("kafkaesque-ui.leader");
 
   if (R.either(R.equals(tabId), R.either(R.isNil, R.isEmpty))(leader)) {
-    localStorage.setItem("kafkaesque-ui.leader", tabId);
-    l()
+    setUpLeader();
   }
 }
 
@@ -25,15 +29,13 @@ function leader(f: () => void) {
   runIfLeader()
 }
 
-const leaderClosed: Observable<any> = Observable.fromEvent(window, "storage");
-leaderClosed.filter( e => 
-    R.isNil( e.key ) ||
-    ( e.key.indexOf("kafkaesque-ui.leader") == 0 &&
-      R.either(R.isEmpty, R.isNil)(e.value) )
-  ).subscribe( () => {
-    runIfLeader()
-  } );
-
+Observable.interval(1000).subscribe( () => {
+  const leader = localStorage.getItem("kafkaesque-ui.leader");
+  console.log(leader);
+  if (R.either(R.isNil, R.isEmpty)(leader)) {
+    setUpLeader();
+  }
+} );
 
 Observable.fromEvent(window, "unload").subscribe( () => {
   if (localStorage.getItem("kafkaesque-ui.leader") == tabId) {
