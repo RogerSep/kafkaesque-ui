@@ -31,7 +31,6 @@ function leader(f: () => void) {
 
 Observable.interval(1000).subscribe( () => {
   const leader = localStorage.getItem("kafkaesque-ui.leader");
-  console.log(leader);
   if (R.either(R.isNil, R.isEmpty)(leader)) {
     setUpLeader();
   }
