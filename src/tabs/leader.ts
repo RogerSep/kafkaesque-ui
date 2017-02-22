@@ -1,15 +1,16 @@
 import { Observable } from "rx"
 import * as R from "ramda";
 
-let l: () => void = null
+let l: () => void = null;
 
-const tabId: string = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-  var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-  return v.toString(16);
-});
+const tabId: string = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+  .replace(/[xy]/g, function (c) {
+    let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
 
 function runIfLeader() {
-  const leader = localStorage.getItem("kafkaesque-ui.leader")
+  const leader = localStorage.getItem("kafkaesque-ui.leader");
 
   if (R.either(R.equals(tabId), R.either(R.isNil, R.isEmpty))(leader)) {
     localStorage.setItem("kafkaesque-ui.leader", tabId);
@@ -24,20 +25,20 @@ function leader(f: () => void) {
   runIfLeader()
 }
 
-const leaderClosed: Observable<any> = Observable.fromEvent(window, "storage")
+const leaderClosed: Observable<any> = Observable.fromEvent(window, "storage");
 leaderClosed.filter( e => 
     R.isNil( e.key ) ||
     ( e.key.indexOf("kafkaesque-ui.leader") == 0 &&
       R.either(R.isEmpty, R.isNil)(e.value) )
-  ).subscribe( e => {
+  ).subscribe( () => {
     runIfLeader()
-  } )
+  } );
 
 
-Observable.fromEvent(window, "unload").subscribe( e => {
+Observable.fromEvent(window, "unload").subscribe( () => {
   if (localStorage.getItem("kafkaesque-ui.leader") == tabId) {
     localStorage.setItem("kafkaesque-ui.leader", "")
   }
-} )
+} );
 
 export { leader };
