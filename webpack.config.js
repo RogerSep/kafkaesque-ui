@@ -8,8 +8,8 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
     libraryTarget: "umd",
-    library: "kafkaesque-ui"
-
+    library: "Kui",
+    umdNamedDefine: true
   },
 
   devtool: "source-map",
