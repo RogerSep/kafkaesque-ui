@@ -1,19 +1,30 @@
+const path = require('path');
+const failPlugin = require('webpack-fail-plugin');
+
 module.exports = {
-  entry: "./src/index.ts",
+  entry: './src/index.ts',
+
   output: {
-    filename: "./dist/bundle.js",
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
     libraryTarget: "umd",
     library: "kafkaesque-ui"
-  },
-  devtool: "source-map",
-  resolve: {
-    extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+
   },
 
+  devtool: "source-map",
+
   module: {
-    loaders: [
-      { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
-      { test: /\.json$/, loader: 'json' }
+    rules: [
+      {test: /\.tsx?$/, loader: 'ts-loader', exclude: /node_modules/}
     ]
-  }
+  },
+
+  resolve: {
+    extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js']
+  },
+
+  plugins: [
+    failPlugin
+  ]
 };
