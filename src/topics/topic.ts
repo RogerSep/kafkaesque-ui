@@ -10,11 +10,11 @@ class Topic {
   }
 
   send(message: any) {
-    let key = `kafkaesque-ui.${this.name}.${Date.now().toString()}`;
-    let value = JSON.stringify(message);
+    const key = `kafkaesque-ui.${this.name}.${Date.now().toString()}`;
+    const value = JSON.stringify(message);
     localStorage.setItem(key, value);
 
-    let event: StorageEvent = new StorageEvent('storage', {
+    const event: StorageEvent = new StorageEvent('storage', {
       url: window.location.href,
       key: key,
       newValue: value
