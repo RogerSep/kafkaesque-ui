@@ -1,7 +1,7 @@
 {
   "name": "kafkaesque-ui",
   "description": "A kafka inspired message system for event-driven front-end applications.",
-  "version": "0.0.0-semantically-released",
+  "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
     "build": "webpack",
