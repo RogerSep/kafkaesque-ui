@@ -1,11 +1,14 @@
 {
   "name": "kafkaesque-ui",
   "description": "A kafka inspired message system for event-driven front-end applications.",
-  "version": "1.0.0",
-  "main": "dist/index.js",
+  "version": "1.0.1",
+  "main": "dist/index.umd.js",
   "scripts": {
-    "build": "webpack",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "build": "npm-run-all --parallel build:*",
+    "build:umd": "webpack --output-filename index.umd.js",
+    "build:umd.min": "webpack --output-filename index.umd.min.js -p",
+    "prebuild": "rimraf dist"
   },
   "repository": {
     "type": "git",
@@ -33,6 +36,8 @@
     "rx": "^4.1.0"
   },
   "devDependencies": {
+    "npm-run-all": "^4.0.2",
+    "rimraf": "^2.6.1",
     "source-map-loader": "^0.1.6",
     "ts-loader": "^2.0.1",
     "typescript": "^2.1.6",
