@@ -9,32 +9,24 @@ const tabId: string = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
     return v.toString(16);
   });
 
-function setUpLeader() {
-  localStorage.setItem("kafkaesque-ui.leader", tabId);
-  l()
-}
-
 function runIfLeader() {
   const leader = localStorage.getItem("kafkaesque-ui.leader");
 
   if (R.either(R.equals(tabId), R.either(R.isNil, R.isEmpty))(leader)) {
-    setUpLeader();
+    localStorage.setItem("kafkaesque-ui.leader", tabId);
+    l()
   }
 }
 
-function leader(f: () => void) {
-  if (l == null) {
-    l = R.once(f);
+function leader(heartbeat: Observable<any>): (f: () => void) => void {
+  return function(f: () => void): void {
+    if (l == null) {
+      l = R.once(f);
+      heartbeat.subscribe( runIfLeader );
+      runIfLeader()
+    }
   }
-  runIfLeader()
 }
-
-Observable.interval(1000).subscribe( () => {
-  const leader = localStorage.getItem("kafkaesque-ui.leader");
-  if (R.either(R.isNil, R.isEmpty)(leader)) {
-    setUpLeader();
-  }
-} );
 
 Observable.fromEvent(window, "unload").subscribe( () => {
   if (localStorage.getItem("kafkaesque-ui.leader") == tabId) {
