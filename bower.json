@@ -1,0 +1,24 @@
+{
+  "name": "kafkaesque-ui",
+  "description": "A kafka inspired message system for event-driven front-end applications.",
+  "main": "dist/index.umd.js",
+  "authors": [
+    "Roger Sepúlveda"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "message",
+    "broker",
+    "event",
+    "driven",
+    "application"
+  ],
+  "homepage": "https://github.com/RogerSep/kafkaesque-ui",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
