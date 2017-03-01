@@ -1,7 +1,7 @@
 import { Observable } from 'rx'
 import * as R from 'ramda';
 
-function leader(heartbeat: Observable<any>, globalContext: any, storage: any): (f: () => void) => void {
+function leader(heartbeat: Observable<any>, globalContext: any): (f: () => void) => void {
 
   let l: () => void = null;
 
@@ -12,17 +12,17 @@ function leader(heartbeat: Observable<any>, globalContext: any, storage: any): (
       } )
 
   function runIfLeader() {
-    const leader = storage.getItem('kafkaesque-ui.leader');
+    const leader = globalContext.localStorage.getItem('kafkaesque-ui.leader');
 
     if (R.either(R.equals(tabId), R.either(R.isNil, R.isEmpty))(leader)) {
-      storage.setItem('kafkaesque-ui.leader', tabId);
+      globalContext.localStorage.setItem('kafkaesque-ui.leader', tabId);
       l()
     }
   }
 
   Observable.fromEvent(globalContext, 'unload').subscribe( () => {
-    if (storage.getItem('kafkaesque-ui.leader') == tabId) {
-      storage.setItem('kafkaesque-ui.leader', '')
+    if (globalContext.localStorage.getItem('kafkaesque-ui.leader') == tabId) {
+      globalContext.localStorage.setItem('kafkaesque-ui.leader', '')
     }
   } )
 
