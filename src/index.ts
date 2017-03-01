@@ -1,11 +1,12 @@
-import { topic as t } from "./topics/topic"
-import { leader } from "./tabs/leader"
-import { Observable } from "rx"
+import { topic as t } from './topics/topic'
+import { leader } from './tabs/leader'
+import { Observable } from 'rx'
 
-const g = leader(Observable.interval(1000))
+const g = leader(Observable.interval(1000), window, localStorage)
 function s(f: () => void = () => {}): void {
   g(f)
 }
+const h = t(window)
 
 namespace Kui {
   
@@ -14,11 +15,11 @@ namespace Kui {
   }
 
   export function topic(name: string) {
-    return t(name)
+    return h(name)
   }
 
 }
 
 export { s as start }
-export { t as topic }
+export { h as topic }
 export default Kui
