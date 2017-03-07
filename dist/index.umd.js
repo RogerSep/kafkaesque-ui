@@ -16886,7 +16886,7 @@ var Topic = (function () {
         var _this = this;
         this.name = name;
         this.observable = topics.filter(function (e) {
-            return !R.isNil(e.key) && e.key.indexOf("kafkaesque-ui." + _this.name) == 0;
+            return !R.isNil(e.key) && e.key.indexOf("kafkaesque-ui." + _this.name + ".") == 0;
         });
     }
     Topic.prototype.send = function (message) {
