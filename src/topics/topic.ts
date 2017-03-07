@@ -6,7 +6,7 @@ const topics: Observable<any> = Observable.fromEvent(window, 'storage');
 class Topic {
   constructor(public name: string) {
     this.observable = topics.filter( e =>
-      !R.isNil(e.key) && e.key.indexOf(`kafkaesque-ui.${this.name}`) == 0);
+      !R.isNil(e.key) && e.key.indexOf(`kafkaesque-ui.${this.name}.`) == 0);
   }
 
   send(message: any) {
