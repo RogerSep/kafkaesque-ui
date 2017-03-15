@@ -3,6 +3,7 @@
   "description": "A kafka inspired message system for event-driven front-end applications.",
   "version": "1.0.5",
   "main": "dist/index.umd.js",
+  "types": "src/index",
   "scripts": {
     "start": "webpack-dev-server",
     "test": "jest",

@@ -1,11 +1,11 @@
 import { Observable } from 'rx';
 import * as R from 'ramda';
 
-interface Topic {
+export interface Topic {
 
   send(message: any): void
 
-  observable: Observable
+  observable: Observable<any>
 
 }
 

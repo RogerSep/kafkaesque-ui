@@ -1,8 +1,8 @@
-import { topic as t } from './topics/topic'
+import { topic as t, Topic } from './topics/topic'
 import { leader } from './tabs/leader'
 import { Observable } from 'rx'
 
-const g = leader(Observable.interval(1000), window, localStorage)
+const g = leader( Observable.interval(1000), localStorage )
 function s(f: () => void = () => {}): void {
   g(f)
 }
@@ -22,4 +22,5 @@ namespace Kui {
 
 export { s as start }
 export { h as topic }
+export { Topic }
 export default Kui
