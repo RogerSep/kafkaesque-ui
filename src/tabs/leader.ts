@@ -3,7 +3,7 @@ import * as R from 'ramda';
 
 function leader(heartbeat: Observable<any>, globalContext: any): (f: () => void) => void {
 
-  let l: () => void = null;
+  let l: any = null;
 
   const tabId: string = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
       .replace(/[xy]/g, function (c) {

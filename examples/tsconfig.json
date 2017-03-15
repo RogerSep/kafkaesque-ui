@@ -5,9 +5,13 @@
         "noImplicitAny": true,
         "module": "commonjs",
         "target": "es5",
-        "jsx": "react"
+        "jsx": "react",
+        "types": []
     },
-    "include": [
-        "./src/**/*"
+    "files": [
+        "src/index.tsx"
+    ],
+    "exclude": [
+        "node_modules"
     ]
 }

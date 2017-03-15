@@ -11,7 +11,8 @@ export interface Topic {
 
 function topic(globalContext: any): (name: string) => Topic {
 
-  const topics: Observable<any> = Observable.fromEvent(globalContext, 'storage');
+  const topics: Observable<any> = Observable.empty()
+    // Observable.fromEvent(globalContext, 'storage');
 
   class TopicImplementation implements Topic {
     constructor(public name: string) {

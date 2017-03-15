@@ -2,7 +2,7 @@
   "name": "examples",
   "version": "1.0.0",
   "description": "",
-  "main": "webpack.config.js",
+  "main": "dist/bundle.js",
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack",
@@ -11,8 +11,6 @@
   "author": "Roger Sepúlveda <roger.planetgreen@gmail.com> (https://github.com/RogerSep)",
   "license": "ISC",
   "dependencies": {
-    "@types/react": "15.0.14",
-    "@types/react-dom": "0.14.23",
     "kafkaesque-ui": "file:..",
     "ramda": "0.23.0",
     "react": "15.4.2",
@@ -21,6 +19,8 @@
   },
   "devDependencies": {
     "@types/ramda": "0.0.4",
+    "@types/react": "15.0.14",
+    "@types/react-dom": "0.14.23",
     "@types/rx": "4.1.1",
     "jest": "19.0.2",
     "npm-run-all": "4.0.2",

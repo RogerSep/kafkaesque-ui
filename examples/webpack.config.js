@@ -20,10 +20,7 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
-    alias: {
-      "kafkaesque-ui": path.resolve(__dirname, '..')
-    }
+    extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js']
   },
 
   plugins: []

@@ -39,12 +39,12 @@ export class MainUi extends React.Component<Props, State> {
 
 
     Observable.from( guests )
-      .concat( Kui.topic("guests.joined").observable.flatMap( ( e: any ) => {
+      .concat( Kui.topic("guests.joined").observable.flatMap<Guest>( ( e: any ) => {
           if ( e.newValue ) {
             const g: Guest = JSON.parse( e.newValue )
             return Observable.just( g )
           } else {
-            return Observable.empty()
+            return Observable.empty<Guest>()
           }
         } ) )
       .subscribe( ( e: Guest ) => {
