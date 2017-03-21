@@ -1,11 +1,12 @@
 const path = require('path');
 const failPlugin = require('webpack-fail-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   entry: './src/index.ts',
 
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve( __dirname, 'dist' ),
     filename: 'bundle.js',
     libraryTarget: "umd",
     library: "Kui",
@@ -25,6 +26,10 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.WatchIgnorePlugin([
+      path.resolve( __dirname, 'examples' ),
+      path.resolve( __dirname, 'dist' )
+    ]),
     failPlugin
   ]
 };

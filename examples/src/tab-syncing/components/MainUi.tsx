@@ -5,6 +5,8 @@ import * as R from "ramda"
 
 import { Guest, Coordinate } from "../model/Adt"
 
+// import "./MainUi.css"
+
 interface State {
   guests: Array<Guest>
 }
@@ -104,22 +106,25 @@ export class MainUi extends React.Component<Props, State> {
   render() {
     return (
       <div>
-        <a href="/" target="_blank">Add more!</a>
+        <a href="#" target="_blank">Add more!</a>
         <div style={ { 
             position: 'relative'
           } }>
           { this.state.guests.map( g => ( 
             <div key={ g.id }
               onMouseEnter={ _ => this.updateGuest( g ) }
+              className="circle"
               style={ {
                 backgroundColor: `#${ g.id }`,
-                width: '50px',
-                height: '50px',
-                borderRadius: '100%',
                 top: g.location.x,
                 left: g.location.y,
-                position: 'absolute',
-                transition: 'top ease 0.5s 0.3s, left ease 0.3s 0.5s'
+
+                width: "50px",
+                height: "50px",
+                borderRadius: "100%",
+                position: "absolute",
+                transition: "top ease 0.5s 0s, left ease 0.3s 0.5s",
+                boxShadow: "0 7px 14px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)"
               } } >
             </div> ) ) }
         </div>

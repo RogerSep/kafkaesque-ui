@@ -2,10 +2,10 @@
   "name": "kafkaesque-ui",
   "description": "A kafka inspired message system for event-driven front-end applications.",
   "version": "1.0.5",
-  "main": "dist/kui.js",
+  "main": "index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "start": "webpack-dev-server",
+    "start": "webpack --watch",
     "test": "jest",
     "build": "npm-run-all --parallel build:*",
     "build:js": "webpack --output-filename kui.js",

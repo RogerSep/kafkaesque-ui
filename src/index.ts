@@ -2,7 +2,7 @@ import { topic as t, Topic } from './topics/topic'
 import { leader } from './tabs/leader'
 import { Observable } from 'rx'
 
-const g = leader( Observable.interval(1000), localStorage )
+const g = leader( Observable.interval(1000), window )
 function s(f: () => void = () => {}): void {
   g(f)
 }

@@ -9,7 +9,10 @@ import { bootstrap } from "./Main"
 const tabId = takeLast( 6, Date.now().toString( 16 ) )
 bootstrap( tabId )
 
+const appNode = document.createElement( "div" )
+document.body.appendChild( appNode )
+
 ReactDOM.render(
-    <MainUi tabId={tabId} />,
-    document.getElementById("example")
+  <MainUi tabId={ tabId } />,
+  appNode
 )

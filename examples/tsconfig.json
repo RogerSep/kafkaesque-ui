@@ -6,11 +6,8 @@
         "module": "commonjs",
         "target": "es5",
         "jsx": "react",
-        "types": []
+        "typeRoots" : ["./node_modules/@types"]
     },
-    "files": [
-        "src/index.tsx"
-    ],
     "exclude": [
         "node_modules"
     ]

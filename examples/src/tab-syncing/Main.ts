@@ -1,14 +1,15 @@
 import { Observable } from "rx"
 import * as Kui from "kafkaesque-ui"
-import { takeLast } from "ramda"
+import * as R from "ramda"
 
 function bootstrap(tabId: string): void {
 
-  Observable.fromEvent( window, 'unload' ).subscribe( () => {
-    Kui.topic("guests.left").send( {
-      id: tabId
+  Observable.fromEvent( window, 'unload' )
+    .subscribe( () => {
+      Kui.topic("guests.left").send( {
+        id: tabId
+      } )
     } )
-  } )
 
   Kui.topic("guests.joined").send( {
     id: tabId,
