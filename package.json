@@ -10,7 +10,8 @@
     "build": "npm-run-all --parallel build:*",
     "build:js": "webpack --output-filename kui.js",
     "build:js.min": "webpack --output-filename kui.min.js -p",
-    "prebuild": "rimraf dist"
+    "prebuild": "rimraf dist",
+    "prestart": "rimraf dist"
   },
   "repository": {
     "type": "git",
@@ -34,10 +35,12 @@
   },
   "homepage": "https://github.com/RogerSep/kafkaesque-ui#readme",
   "dependencies": {
+    "data.either": "1.5.0",
     "ramda": "^0.23.0",
     "rx": "^4.1.0"
   },
   "devDependencies": {
+    "@types/jest": "19.2.2",
     "@types/ramda": "0.0.4",
     "@types/rx": "4.1.1",
     "jest": "^19.0.2",

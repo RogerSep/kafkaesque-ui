@@ -1,44 +1,117 @@
-import { Observable } from 'rx';
+import { Observable, Subject } from 'rx';
+import * as Either from "data.either"
 import * as R from 'ramda';
 
-export interface Topic {
+export interface TopicOptions {
+  fromBeginning: boolean
+}
 
-  send(message: any): void
+export interface Message<T> {
+  id: string,
+  timestamp: number,
+  message: T
+}
 
-  observable: Observable<any>
+export interface Topic<T> {
+
+  send(message: T): Either<Error, Message<T>>
+
+  observable(options: TopicOptions): Observable<Message<T>>
 
 }
 
-function topic(globalContext: any): (name: string) => Topic {
+export function topic(globalContext: any) {
 
-  const topics: Observable<any> =
-    Observable.fromEvent(globalContext, 'storage');
+  type TopicInfo = [ string, Message<any> ]
 
-  class TopicImplementation implements Topic {
+  const everyTopicSubject = new Subject<TopicInfo>()
+
+  const everyTopic: Observable<TopicInfo> =
+    Observable.fromEvent<StorageEvent>(globalContext, 'storage')
+      .filter( e => 
+        e.key.indexOf("kafkaesque-ui") == 0 && 
+        e.oldValue == null && 
+        e.newValue != null
+      )
+      .map( e => {
+        JSON.parse( e.newValue )
+        const m: Message<any> = {
+          id: Date.now().toString(),
+          timestamp: Date.now(),
+          message: JSON.parse( e.newValue )
+        }
+
+        return <TopicInfo> [ e.key, m ]
+      } )
+      .merge( everyTopicSubject );
+
+  class TopicImplementation<T> implements Topic<T> {
+
+    private obs: Observable<Message<T>>
+
     constructor(public name: string) {
-      this.observable = topics.filter( e =>
-      !R.isNil(e.key) && e.key.indexOf(`kafkaesque-ui.${this.name}`) == 0);
+      this.name = name
+      this.obs = everyTopic
+        .flatMap( x => {
+          const [ key, m ] = x
+
+          if ( key.indexOf(`kafkaesque-ui.${this.name}`) == 0 ) {
+            return Observable.just<Message<T>>( m )
+          } else {
+            return Observable.empty<Message<T>>()
+          }
+        } )
     }
 
-    send(message: any) {
-      const key = `kafkaesque-ui.${this.name}.${Date.now().toString()}`;
-      const value = JSON.stringify(message);
-      localStorage.setItem(key, value);
+    send( message: T ): Either<Error, Message<T>> {
+      try {
+        const m: Message<T> = {
+          id: Date.now().toString(),
+          timestamp: Date.now(),
+          message: message
+        }
+        const key = `kafkaesque-ui.${this.name}.${m.timestamp}.${m.id}`;
+        const value = JSON.stringify( m.message );
+        globalContext.localStorage.setItem( key, value );
 
-      const event: StorageEvent = new StorageEvent('storage', {
-        url: globalContext.location.href,
-        key: key,
-        newValue: value
-      } );
-      globalContext.dispatchEvent(event);
+        everyTopicSubject.onNext( [ key, m ] )
+
+        return new Either.Right( m )
+      } catch ( e ) {
+        return new Either.Left( e )
+      }
     }
 
-    observable: Observable<any>
+    observable( options: TopicOptions = { fromBeginning: false } ): Observable<Message<T>> {
+      if (options.fromBeginning) {
+        const messages = R.range(0, localStorage.length)
+          .map( ( i: number ) => localStorage.key( i ) )
+          .reduce( ( items: Array<Message<T>>, k: string ) => {
+          
+            const m: T = JSON.parse( localStorage.getItem( k ) )
+            if ( k.indexOf( `kafkaesque-ui.${this.name}` ) == 0 ) {
+              const keyMeta = k.split(".")
+              return items.concat( {
+                id: R.nth( -1, keyMeta ),
+                timestamp: Number( R.nth( -2, keyMeta ) ),
+                message: m
+              } )
+            } else {
+              return items
+            }
+
+          }, [] )
+
+        return Observable.from( messages ).concat( this.obs )
+      } else {
+        return this.obs
+      }
+    }
   }
 
-  return function (name: string) {
-    return new TopicImplementation(name)
+  return function <T>(name: string) {
+    return <Topic<T>> new TopicImplementation<T>(name)
   }
 }
 
-export { topic };
+export { Either }

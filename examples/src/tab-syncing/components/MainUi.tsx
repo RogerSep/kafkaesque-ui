@@ -1,5 +1,5 @@
 import * as React from "react"
-import * as Kui from "kafkaesque-ui"
+import { topic } from "kafkaesque-ui"
 import { Observable } from "rx"
 import * as R from "ramda"
 
@@ -25,51 +25,27 @@ export class MainUi extends React.Component<Props, State> {
   }
 
   componentWillMount() {
-    const guests = R.range(0, localStorage.length).map( ( i: number ) => localStorage.key( i ) )
-      .reduce( ( items: Array<Guest>, k: string ) => {
-      
-        const g: Guest = JSON.parse( localStorage.getItem( k ) )
-        if ( k.indexOf("guests.joined") > 0 ) {
-          return items.concat( g )
-        } else if ( k.indexOf("guests.left") > 0 ) {
-          return items.filter( i => i.id != g.id )
-        } else {
-          return items
-        }
 
-      }, [] )
-
-
-    Observable.from( guests )
-      .concat( Kui.topic("guests.joined").observable.flatMap<Guest>( ( e: any ) => {
-          if ( e.newValue ) {
-            const g: Guest = JSON.parse( e.newValue )
-            return Observable.just( g )
-          } else {
-            return Observable.empty<Guest>()
-          }
-        } ) )
+    topic("guests.joined")
+      .observable( { fromBeginning: true } )
+      .map( g => g.message )
       .subscribe( ( e: Guest ) => {
           this.setState( old => ( {
             guests: old.guests.concat( e )
           } ) )
         } )
 
-    Kui.topic("guests.left").observable.subscribe( ( e: any ) => {
-      const guest: Guest = JSON.parse( e.newValue )
-
+    topic("guests.left").observable( { fromBeginning: true } ).subscribe( ( e: any ) => {
       this.setState( ( old: State ) => ( {
-        guests: old.guests.filter( s => s.id != guest.id )
+        guests: old.guests.filter( s => s.id != e.message.id )
       } ) )
     } )
 
-    Kui.topic("guests.update").observable.subscribe( ( e: any ) => {
-      const guest: Guest = JSON.parse( e.newValue )
-
+    topic("guests.update").observable({ fromBeginning: true }).subscribe( ( e: any ) => {
       this.setState( ( old: State ) => ( {
         guests: old.guests.map( g => {
-          if ( g.id == guest.id ) {
-            return guest
+          if ( g.id == e.message.id ) {
+            return e.message
           } else {
             return g
           }
@@ -93,14 +69,14 @@ export class MainUi extends React.Component<Props, State> {
       }
     }
 
-    Kui.topic("guests.update").send(
+    console.log( topic("guests.update").send(
       R.evolve( {
         location: {
           x: addRandom,
           y: addRandom
         }
       } )( g )
-    )
+    ) )
   }
 
   render() {
