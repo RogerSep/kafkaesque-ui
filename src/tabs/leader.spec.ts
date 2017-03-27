@@ -1,14 +1,19 @@
 import { leader as l } from './leader'
 import { Observable } from 'rx'
 import { jsdom } from 'jsdom'
+import { Topic, topic } from '../topics/topic'
 
 describe( "Leader execution", () => {
 
   let leader: (f: () => void) => void
+  let garbageTopic: Topic<string>
 
   beforeEach( () => {
-    leader = l(Observable.interval(1000), window)
+    garbageTopic = topic(window)[0]
+
+    leader = l(Observable.interval(1000), garbageTopic, window)
     window.localStorage = {
+      length: 0,
       setItem: jest.fn(),
       getItem: jest.fn()
     }

@@ -2,11 +2,11 @@ import { topic as t, Topic } from './topics/topic'
 import { leader } from './tabs/leader'
 import { Observable } from 'rx'
 
-const g = leader( Observable.interval(1000), window )
+const [ garbageTopic, h ] = t(window)
+const g = leader( Observable.interval(1000), garbageTopic, window )
 function s(f: () => void = () => {}): void {
   g(f)
 }
-const h = t(window)
 
 namespace Kui {
   

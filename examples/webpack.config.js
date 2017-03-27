@@ -6,8 +6,7 @@ const ExtractTextPlugin = require( "extract-text-webpack-plugin" )
 module.exports = {
   entry: {
     "tab-syncing": path.resolve( __dirname, "./src/tab-syncing/index.tsx" ),
-    multiplexing: path.resolve( __dirname, "./src/multiplexing/index.tsx" ),
-    persistency: path.resolve( __dirname, "./src/persistency/index.tsx" )
+    offline: path.resolve( __dirname, "./src/offline/index.tsx" )
   },
 
   output: {
@@ -35,12 +34,31 @@ module.exports = {
         test: /\.css$/,
         use: ExtractTextPlugin.extract( {
           fallback: [
-            { loader: "style-loader" }
+            { loader: "style-loader", options: { sourceMap: true } }
           ],
-          use: [ 
-            { loader: "css-loader" }
+          use: [
+            { loader: "css-loader", options: { sourceMap: true } }
           ]
         } )
+      },
+      {
+        test: /\.scss$/,
+        use: ExtractTextPlugin.extract( {
+          fallback: [
+            { loader: "style-loader" }
+          ],
+          use: [
+            { loader: "css-loader", options: { sourceMap: true, modules: true } },
+            { loader: "sass-loader", options: { sourceMap: true } }
+          ]  
+        } )
+      },
+      {
+        test: /\.md$/,
+        use: [
+          { loader: "html-loader" },
+          { loader: "markdown-loader" }
+        ]
       }
     ]
   },
@@ -48,7 +66,7 @@ module.exports = {
   resolve: {
     extensions: [ ".webpack.js", ".web.js", ".ts", ".tsx", ".js" ],
     alias: {
-      "kafkaesque-ui$": path.resolve( __dirname, "../dist/kui.min.js" )
+      "kafkaesque-ui$": path.resolve( __dirname, "../dist/kui.js" )
     }
   },
 
@@ -58,12 +76,8 @@ module.exports = {
       chunks: [ "tab-syncing" ]
     } ),
     new HtmlWebpackPlugin( {
-      filename: "multiplexing.html",
-      chunks: [ "multiplexing" ]
-    } ),
-    new HtmlWebpackPlugin( {
-      filename: "persistency.html",
-      chunks: [ "persistency" ]
+      filename: "offline.html",
+      chunks: [ "offline" ]
     } ),
     new ExtractTextPlugin( {
       filename: "[name].css"

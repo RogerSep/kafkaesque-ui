@@ -22,7 +22,10 @@
     "broker",
     "event",
     "driven",
-    "application"
+    "application",
+    "offline",
+    "application",
+    "localStorage"
   ],
   "files": [
     "dist",

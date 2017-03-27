@@ -1,6 +1,6 @@
 import { Observable, Subject } from 'rx';
 import * as Either from "data.either"
-import * as R from 'ramda';
+import * as R from "ramda"
 
 export interface TopicOptions {
   fromBeginning: boolean
@@ -18,9 +18,11 @@ export interface Topic<T> {
 
   observable(options: TopicOptions): Observable<Message<T>>
 
+  ack(message: Message<T>): void
+
 }
 
-export function topic(globalContext: any) {
+export function topic(globalContext: any): [ Topic<string>, (string) => Topic<string> ] {
 
   type TopicInfo = [ string, Message<any> ]
 
@@ -34,7 +36,7 @@ export function topic(globalContext: any) {
         e.newValue != null
       )
       .map( e => {
-        JSON.parse( e.newValue )
+
         const m: Message<any> = {
           id: Date.now().toString(),
           timestamp: Date.now(),
@@ -44,6 +46,8 @@ export function topic(globalContext: any) {
         return <TopicInfo> [ e.key, m ]
       } )
       .merge( everyTopicSubject );
+
+  let garbageTopic: Topic<string>
 
   class TopicImplementation<T> implements Topic<T> {
 
@@ -88,8 +92,8 @@ export function topic(globalContext: any) {
           .map( ( i: number ) => localStorage.key( i ) )
           .reduce( ( items: Array<Message<T>>, k: string ) => {
           
-            const m: T = JSON.parse( localStorage.getItem( k ) )
             if ( k.indexOf( `kafkaesque-ui.${this.name}` ) == 0 ) {
+              const m: T = JSON.parse( localStorage.getItem( k ) )
               const keyMeta = k.split(".")
               return items.concat( {
                 id: R.nth( -1, keyMeta ),
@@ -107,11 +111,19 @@ export function topic(globalContext: any) {
         return this.obs
       }
     }
+
+    ack(message: Message<T>) {
+      garbageTopic.send(`kafkaesque-ui.${this.name}.${message.timestamp}.${message.id}`)
+    }
   }
 
-  return function <T>(name: string) {
+  function topicImpl <T> (name: string) {
     return <Topic<T>> new TopicImplementation<T>(name)
   }
+
+  garbageTopic = topicImpl<string>("kui.garbage")
+
+  return [ garbageTopic, topicImpl ]
 }
 
 export { Either }

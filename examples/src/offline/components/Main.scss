@@ -1,0 +1,21 @@
+.mainContainer {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+
+.ui {
+  display: flex;
+  justify-content: space-around;
+  margin: 50px;
+
+  button {
+    padding: 10px;
+    background-color: #0277BD;
+    border: 0;
+    color: white;
+    font-size: 16px;
+    border-radius: 3px;
+  }
+}

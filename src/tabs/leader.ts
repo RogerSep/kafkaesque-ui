@@ -1,7 +1,8 @@
 import { Observable } from 'rx'
-import * as R from 'ramda';
+import * as R from 'ramda'
+import { Topic, Message } from '../topics/topic'
 
-function leader(heartbeat: Observable<any>, globalContext: any): (f: () => void) => void {
+function leader(heartbeat: Observable<any>, garbage: Topic<string>, globalContext: any): (f: () => void) => void {
 
   let l: any = null;
 
@@ -16,6 +17,13 @@ function leader(heartbeat: Observable<any>, globalContext: any): (f: () => void)
 
     if (R.either(R.equals(tabId), R.either(R.isNil, R.isEmpty))(leader)) {
       globalContext.localStorage.setItem('kafkaesque-ui.leader', tabId);
+
+      garbage.observable({ fromBeginning: true })
+        .subscribe( m => {
+          globalContext.localStorage.removeItem(`kafkaesque-ui.kui.garbage.${m.timestamp}.${m.id}`)
+          globalContext.localStorage.removeItem(m.message)
+        } )
+
       l()
     }
   }

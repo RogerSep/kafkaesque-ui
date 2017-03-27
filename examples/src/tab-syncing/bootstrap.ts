@@ -11,13 +11,13 @@ function bootstrap(tabId: string): void {
       } )
     } )
 
-  Kui.topic("guests.joined").send( {
+  console.log( Kui.topic("guests.joined").send( {
     id: tabId,
     location: {
       x: 0,
       y: 0
     }
-  } )
+  } ) )
 
 }
 
